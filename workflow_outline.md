@@ -12,7 +12,7 @@ Cursor (an AI-powered code editor based on VS Code with built-in AI features for
 
 ## 2 · End-to-End Modernization Workflow (10 Steps)
 
-### Step 0: Setup & Configuration
+### Step 1: Setup & Configuration
 
 **Cursor Action (🖥️):**
 - Open repository in Cursor
@@ -35,7 +35,7 @@ following these principles:
 **Role:** Senior Software Architect with 10+ years of experience in system design.
 ```
 
-### Step 1: Code Analysis
+### Step 2: Code Analysis
 
 **Cursor Action (🖥️):**
 - Use Chat: "Analyze this legacy code for architectural issues, security vulnerabilities, and modernization opportunities."
@@ -56,7 +56,7 @@ Analyze the following codebase for:
 }
 ```
 
-### Step 2: Module Extraction
+### Step 3: Module Extraction
 
 **Cursor Action (🖥️):**
 - Highlight functions → Inline Edit (`⌘/Ctrl K`) → create separate modules
@@ -97,7 +97,7 @@ class AuthManager:
 Now extract the database functions from main.py into database.py following the same pattern.
 ```
 
-### Step 3: Database Migration
+### Step 4: Database Migration
 
 **Cursor Action (🖥️):**
 - Chat: "Create database.py with SQLite integration and SHA-256 password hashing."
@@ -121,7 +121,7 @@ You are a senior Python database engineer. Create a database.py module that:
 **Output Format:** Complete Python module with imports, classes, and methods.
 ```
 
-### Step 4: API Development
+### Step 5: API Development
 
 **Cursor Action (🖥️):**
 - Chat: "You are a senior Python API engineer. Generate Flask routes for /register, /login, /get_user with proper error handling."
@@ -153,7 +153,7 @@ Generate Flask routes that:
 **Output Format:** Complete Flask routes with proper decorators, validation, and error handling.
 ```
 
-### Step 5: Data Migration
+### Step 6: Data Migration
 
 **Cursor Action (🖥️):**
 - Agent (`⌃/Ctrl I`): "Replace all in-memory user storage with database calls."
@@ -177,7 +177,7 @@ Focus on:
 **Output Format:** Modified code with database integration and migration scripts.
 ```
 
-### Step 6: Testing Strategy
+### Step 7: Testing Strategy
 
 **Cursor Action (🖥️):**
 - Generate unit tests using Chat: "Create comprehensive tests for the authentication system."
@@ -209,9 +209,8 @@ Let's think step by step about test coverage for the authentication system:
 
 **Output Format:** Complete test suite with pytest fixtures and comprehensive coverage.
 ```
-```
 
-### Step 7: Debug & Refine
+### Step 8: Debug & Refine
 
 **Cursor Action (🖥️):**
 - Paste failing tests → "Analyze this error step by step and suggest fixes."
@@ -236,7 +235,7 @@ Analyze this test failure step by step:
 **Output Format:** Detailed analysis with specific code fixes and explanations.
 ```
 
-### Step 8: Integration Testing
+### Step 9: Integration Testing
 
 **Cursor Action (🖥️):**
 - Test API endpoints and database operations
@@ -261,7 +260,7 @@ Create integration tests that:
 **Output Format:** Integration test suite with performance benchmarks and error scenarios.
 ```
 
-### Step 9: Documentation
+### Step 10: Documentation
 
 **Cursor Action (🖥️):**
 - Generate README and commit messages using AI assistance
