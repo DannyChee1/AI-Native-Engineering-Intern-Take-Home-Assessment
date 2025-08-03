@@ -1,6 +1,6 @@
 # AI-Native Development Workflow with Cursor
 
-**Loom video walkthrough – insert link here →** `https://loom.com/share/your-video-id`
+**Loom video walkthrough –** `https://loom.com/share/your-video-id`
 
 ---
 
@@ -17,7 +17,6 @@ Cursor (an AI-powered code editor based on VS Code with built-in AI features for
 **Cursor Action (🖥️):**
 - Open repository in Cursor
 - `git checkout -b refactor-monolith`
-- Enable code-index for semantic search
 - Configure Cursor Rules for security standards
 
 **Prompt-Engineering Strategy (💡):**
@@ -104,7 +103,7 @@ Now extract the database functions from main.py into database.py following the s
 - Chat: "Create database.py with SQLite integration and SHA-256 password hashing."
 
 **Prompt-Engineering Strategy (💡):**
-```markdown
+
 **Contextual + Role Prompting:**
 You are a senior Python database engineer. Create a database.py module that:
 1. Uses SQLite with proper connection management
@@ -120,7 +119,6 @@ You are a senior Python database engineer. Create a database.py module that:
 - Add docstrings following Google style
 
 **Output Format:** Complete Python module with imports, classes, and methods.
-```
 
 ### Step 4: API Development
 
@@ -484,65 +482,20 @@ Based on this analysis, provide a step-by-step refactoring plan."
 | **Maintainability** | Ad-hoc refactoring | Modular structure with clear separation of concerns | 30-50% more maintainable |
 | **Testability** | Manual test case creation | Comprehensive test coverage generated alongside code | 60-80% better test coverage |
 
----
 
-## 8 · Prompt Engineering Documentation Template
 
-### 8.1 Prompt Documentation Table
+## 8 · Troubleshooting Common Issues
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| **Name** | Prompt identifier and version | `auth_refactor_v2.1` |
-| **Goal** | One sentence explanation | "Extract authentication functions into separate module" |
-| **Model** | Model name and version | `gemini-pro` |
-| **Temperature** | Creativity setting (0-1) | `0.1` |
-| **Token Limit** | Maximum response length | `1024` |
-| **Top-K** | Sampling parameter | `40` |
-| **Top-P** | Nucleus sampling | `0.8` |
-| **Prompt** | Complete prompt text | Full prompt with examples |
-| **Output** | Generated response | Complete code or analysis |
-| **Result** | OK/NOT OK/SOMETIMES OK | `OK` |
-| **Feedback** | Notes for improvement | "Add more specific error handling examples" |
-
-### 8.2 Prompt Version Control
-
-```markdown
-**File Structure:**
-```
-prompts/
-├── auth/
-│   ├── auth_refactor_v1.0.md
-│   ├── auth_refactor_v2.0.md
-│   └── auth_refactor_v2.1.md
-├── database/
-│   ├── db_migration_v1.0.md
-│   └── db_migration_v1.1.md
-└── testing/
-    ├── test_generation_v1.0.md
-    └── test_generation_v1.1.md
-```
-
-**Version Naming Convention:**
-- Major.Minor.Patch (e.g., v2.1.3)
-- Major: Significant changes in approach
-- Minor: Improvements or additions
-- Patch: Bug fixes or refinements
-```
-
----
-
-## 9 · Troubleshooting Common Issues
-
-### 9.1 Prompt Engineering Challenges
+### 8.1 Prompt Engineering Challenges
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| **Inconsistent Output** | Unclear instructions or high temperature | Use specific instructions and lower temperature (0.1-0.3) |
+| **Inconsistent Output** | Unclear instructions or insufficient context | Use specific instructions and provide more context |
 | **Hallucinated Code** | Insufficient context or examples | Provide more specific examples and context |
 | **Poor Code Quality** | Missing role or system prompts | Use role-based prompting with specific expertise |
 | **Incomplete Solutions** | Token limits or vague requirements | Increase token limits and be more specific |
 
-### 9.2 Debugging Strategies
+### 8.2 Debugging Strategies
 
 ```markdown
 **Debugging Process:**
@@ -565,7 +518,6 @@ prompts/
 
 1. Cursor Documentation – <https://cursor.sh/docs>
 2. Cursor Features Overview – <https://cursor.sh/features>
-3. Best Practices for AI-Assisted Development – <https://cursor.sh/docs/best-practices>
-4. Prompt Engineering Guide – <https://developers.google.com/machine-learning/prompt-engineering>
+3. Prompt Engineering Guide – <https://www.gptaiflow.com/assets/files/2025-01-18-pdf-1-TechAI-Goolge-whitepaper_Prompt%20Engineering_v4-af36dcc7a49bb7269a58b1c9b89a8ae1.pdf>
 
 ---
