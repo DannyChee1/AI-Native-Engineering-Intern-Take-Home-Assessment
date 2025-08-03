@@ -126,7 +126,7 @@ You are a senior Python database engineer. Create a database.py module that:
 - Chat: "You are a senior Python API engineer. Generate Flask routes for /register, /login, /get_user with proper error handling."
 
 **Prompt-Engineering Strategy (💡):**
-```markdown
+
 **Role-based Prompting:**
 You are a senior Python API engineer with expertise in Flask and RESTful design. 
 Generate Flask routes that:
@@ -150,7 +150,6 @@ Generate Flask routes that:
 - 500: Internal Server Error (server issues)
 
 **Output Format:** Complete Flask routes with proper decorators, validation, and error handling.
-```
 
 ### Step 5: Data Migration
 
@@ -158,7 +157,7 @@ Generate Flask routes that:
 - Agent (`⌃/Ctrl I`): "Replace all in-memory user storage with database calls."
 
 **Prompt-Engineering Strategy (💡):**
-```markdown
+
 **Step-Back Prompting:**
 
 **Step 1 - Planning:**
@@ -174,7 +173,6 @@ Focus on:
 - Data validation before storage
 
 **Output Format:** Modified code with database integration and migration scripts.
-```
 
 ### Step 6: Testing Strategy
 
@@ -182,7 +180,7 @@ Focus on:
 - Generate unit tests using Chat: "Create comprehensive tests for the authentication system."
 
 **Prompt-Engineering Strategy (💡):**
-```markdown
+
 **Chain-of-Thought Testing Prompt:**
 Let's think step by step about test coverage for the authentication system:
 
