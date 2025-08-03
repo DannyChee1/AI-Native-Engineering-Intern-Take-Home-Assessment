@@ -92,11 +92,6 @@ class AuthManager:
     def register_user(self, username, password):
         # registration logic
         return user
-```
-
-Now extract the database functions from main.py into database.py following the same pattern.
-```
-
 ### Step 4: Database Migration
 
 **Cursor Action (🖥️):**
