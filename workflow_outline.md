@@ -1,6 +1,6 @@
 # AI-Native Development Workflow with Cursor
 
-**Loom video walkthrough –** `https://loom.com/share/your-video-id`
+**Loom video walkthrough –** `https://www.loom.com/share/32507ef3a82a45f6ba7f62261dc7d431?sid=20b8d289-239e-48e1-b833-a943d75f37ef`
 
 ---
 
@@ -92,6 +92,8 @@ class AuthManager:
     def register_user(self, username, password):
         # registration logic
         return user
+```
+
 ### Step 4: Database Migration
 
 **Cursor Action (🖥️):**
