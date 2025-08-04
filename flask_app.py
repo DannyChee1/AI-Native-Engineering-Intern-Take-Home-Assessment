@@ -29,10 +29,20 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=1)
 # Enable CORS for cross-origin requests
 CORS(app)
 
-# Initialize storage and auth managers
-# Use DatabaseManager for all operations (SQLite-only approach)
-storage_manager = DatabaseManager(db_path="users.db")
-auth_manager = AuthManager(storage_manager)
+# Global storage and auth managers (will be initialized)
+storage_manager = None
+auth_manager = None
+
+
+def initialize_managers(db_path: str = "users.db"):
+    """Initialize storage and auth managers with specified database path."""
+    global storage_manager, auth_manager
+    storage_manager = DatabaseManager(db_path=db_path)
+    auth_manager = AuthManager(storage_manager)
+
+
+# Initialize with default database for production
+initialize_managers()
 
 
 def generate_jwt_token(user_data: Dict[str, Any]) -> str:
@@ -127,7 +137,7 @@ def validate_json_request(required_fields: list):
         required_fields: List of required field names
         
     Returns:
-        Decorator function
+        Decorated function
     """
     def decorator(f):
         @wraps(f)
@@ -153,18 +163,7 @@ def validate_json_request(required_fields: list):
                 return jsonify({
                     'success': False,
                     'message': f'Missing required fields: {", ".join(missing_fields)}',
-                    'error': 'MISSING_FIELDS',
-                    'missing_fields': missing_fields
-                }), 400
-            
-            # Check for empty string values
-            empty_fields = [field for field in required_fields if not data.get(field, '').strip()]
-            if empty_fields:
-                return jsonify({
-                    'success': False,
-                    'message': f'Empty values not allowed for fields: {", ".join(empty_fields)}',
-                    'error': 'EMPTY_FIELDS',
-                    'empty_fields': empty_fields
+                    'error': 'MISSING_FIELDS'
                 }), 400
             
             return f(*args, **kwargs)
@@ -178,50 +177,68 @@ def register():
     """
     Register a new user.
     
-    Request Body:
-        {
-            "username": "string",
-            "password": "string"
-        }
+    Expected JSON:
+    {
+        "username": "string",
+        "password": "string"
+    }
     
     Returns:
-        JSON response with registration result
+        JSON response with success status and message
     """
     try:
         data = request.get_json()
-        username = data['username'].strip()
+        username = data['username']
         password = data['password']
         
-        # Attempt user registration
+        # Attempt to register user
         result = auth_manager.register_user(username, password)
         
         if result.success:
+            logger.info(f"User '{username}' registered successfully")
             return jsonify({
                 'success': True,
-                'message': result.message,
-                'user': result.user_data
+                'message': 'User registered successfully',
+                'data': {
+                    'username': username
+                }
             }), 201
         else:
-            # Map auth result types to HTTP status codes
-            status_code = 400
+            # Handle different failure types
             if result.result_type == AuthResultType.USER_EXISTS:
-                status_code = 409  # Conflict
-            elif result.result_type == AuthResultType.WEAK_PASSWORD:
-                status_code = 400
+                logger.warning(f"Registration failed: User '{username}' already exists")
+                return jsonify({
+                    'success': False,
+                    'message': 'User already exists',
+                    'error': 'USER_EXISTS'
+                }), 409
             elif result.result_type == AuthResultType.INVALID_USERNAME:
-                status_code = 400
-            
-            return jsonify({
-                'success': False,
-                'message': result.message,
-                'error': result.result_type.value
-            }), status_code
-            
+                logger.warning(f"Registration failed: Invalid username '{username}'")
+                return jsonify({
+                    'success': False,
+                    'message': result.message,
+                    'error': 'INVALID_USERNAME'
+                }), 400
+            elif result.result_type == AuthResultType.WEAK_PASSWORD:
+                logger.warning(f"Registration failed: Weak password for user '{username}'")
+                return jsonify({
+                    'success': False,
+                    'message': result.message,
+                    'error': 'WEAK_PASSWORD'
+                }), 400
+            else:
+                logger.error(f"Registration failed for user '{username}': {result.message}")
+                return jsonify({
+                    'success': False,
+                    'message': 'Registration failed',
+                    'error': 'REGISTRATION_FAILED'
+                }), 400
+                
     except Exception as e:
-        logger.error(f"Registration error: {str(e)}")
+        logger.error(f"Unexpected error during registration: {str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Internal server error during registration',
+            'message': 'Internal server error',
             'error': 'INTERNAL_ERROR'
         }), 500
 
@@ -232,55 +249,65 @@ def login():
     """
     Authenticate user and return JWT token.
     
-    Request Body:
-        {
-            "username": "string",
-            "password": "string"
-        }
+    Expected JSON:
+    {
+        "username": "string",
+        "password": "string"
+    }
     
     Returns:
-        JSON response with JWT token
+        JSON response with JWT token on success
     """
     try:
         data = request.get_json()
-        username = data['username'].strip()
+        username = data['username']
         password = data['password']
         
-        # Attempt user login
+        # Attempt to authenticate user
         result = auth_manager.login_user(username, password)
         
         if result.success:
             # Generate JWT token
-            token = generate_jwt_token(result.user_data)
+            token = generate_jwt_token({'username': username})
             
+            logger.info(f"User '{username}' logged in successfully")
             return jsonify({
                 'success': True,
-                'message': result.message,
+                'message': 'Login successful',
                 'token': token,
-                'user': result.user_data,
-                'expires_in': app.config['JWT_ACCESS_TOKEN_EXPIRES'].total_seconds()
+                'data': {
+                    'username': username
+                }
             }), 200
         else:
-            # Map auth result types to HTTP status codes
-            status_code = 401
+            # Handle different failure types
             if result.result_type == AuthResultType.USER_NOT_FOUND:
-                status_code = 404
+                logger.warning(f"Login failed: User '{username}' not found")
+                return jsonify({
+                    'success': False,
+                    'message': 'User not found',
+                    'error': 'USER_NOT_FOUND'
+                }), 404
             elif result.result_type == AuthResultType.INVALID_CREDENTIALS:
-                status_code = 401
-            elif result.result_type == AuthResultType.INVALID_INPUT:
-                status_code = 400
-            
-            return jsonify({
-                'success': False,
-                'message': result.message,
-                'error': result.result_type.value
-            }), status_code
-            
+                logger.warning(f"Login failed: Invalid credentials for user '{username}'")
+                return jsonify({
+                    'success': False,
+                    'message': 'Invalid credentials',
+                    'error': 'INVALID_CREDENTIALS'
+                }), 401
+            else:
+                logger.error(f"Login failed for user '{username}': {result.message}")
+                return jsonify({
+                    'success': False,
+                    'message': 'Login failed',
+                    'error': 'LOGIN_FAILED'
+                }), 400
+                
     except Exception as e:
-        logger.error(f"Login error: {str(e)}")
+        logger.error(f"Unexpected error during login: {str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Internal server error during login',
+            'message': 'Internal server error',
             'error': 'INTERNAL_ERROR'
         }), 500
 
@@ -289,13 +316,13 @@ def login():
 @require_auth
 def get_user():
     """
-    Retrieve user profile (authenticated endpoint).
+    Get current user data (requires authentication).
     
     Headers:
         Authorization: Bearer <jwt_token>
     
     Returns:
-        JSON response with user profile data
+        JSON response with user data
     """
     try:
         username = request.user['username']
@@ -304,30 +331,25 @@ def get_user():
         result = auth_manager.get_user_data(username)
         
         if result.success:
+            logger.info(f"User data retrieved for '{username}'")
             return jsonify({
                 'success': True,
-                'message': result.message,
+                'message': 'User data retrieved successfully',
                 'user': result.user_data
             }), 200
         else:
-            # Map auth result types to HTTP status codes
-            status_code = 404
-            if result.result_type == AuthResultType.USER_NOT_FOUND:
-                status_code = 404
-            elif result.result_type == AuthResultType.INVALID_USERNAME:
-                status_code = 400
-            
+            logger.error(f"Failed to retrieve user data for '{username}': {result.message}")
             return jsonify({
                 'success': False,
-                'message': result.message,
-                'error': result.result_type.value
-            }), status_code
-            
+                'message': 'Failed to retrieve user data',
+                'error': 'USER_DATA_ERROR'
+            }), 500
+                
     except Exception as e:
-        logger.error(f"Get user error: {str(e)}")
+        logger.error(f"Unexpected error retrieving user data: {str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Internal server error while retrieving user data',
+            'message': 'Internal server error',
             'error': 'INTERNAL_ERROR'
         }), 500
 
@@ -338,15 +360,26 @@ def health_check():
     Health check endpoint.
     
     Returns:
-        JSON response indicating service status
+        JSON response with service status
     """
-    return jsonify({
-        'success': True,
-        'message': 'Service is healthy',
-        'timestamp': datetime.datetime.utcnow().isoformat()
-    }), 200
+    try:
+        return jsonify({
+            'success': True,
+            'message': 'Service is healthy',
+            'status': 'healthy',
+            'timestamp': datetime.datetime.now().isoformat()
+        }), 200
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': 'Service is unhealthy',
+            'status': 'unhealthy',
+            'error': str(e)
+        }), 500
 
 
+# Error handlers
 @app.errorhandler(404)
 def not_found(error):
     """Handle 404 errors."""
@@ -379,5 +412,4 @@ def internal_server_error(error):
 
 
 if __name__ == '__main__':
-    # Run the Flask application
     app.run(debug=True, host='0.0.0.0', port=5000) 

@@ -6,7 +6,7 @@ Implements secure authentication with password hashing, input validation, and pr
 import hashlib
 import secrets
 import re
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Dict, Any, Tuple, Type
 from dataclasses import dataclass
 from enum import Enum
 
@@ -79,14 +79,10 @@ class AuthManager:
                 result_type=AuthResultType.USER_EXISTS
             )
             
-        # Hash password with salt
-        salt, hashed_password = self._hash_password(password)
-        
-        # Create user data
+        # Create user data (let DatabaseManager handle password hashing)
         user_data = {
             'username': username,
-            'password_hash': hashed_password,
-            'salt': salt,
+            'password': password,  # Pass plain password, let DB handle hashing
             'created_at': self._get_current_timestamp()
         }
         

@@ -37,7 +37,7 @@ This Flask API provides secure user authentication with the following features:
 
 3. **Test the API**:
    ```bash
-   python test_flask_api.py
+   python test_unittest.py
    ```
 
 ## API Endpoints
@@ -264,7 +264,7 @@ curl -X GET http://localhost:5000/health
 Run the comprehensive test suite:
 
 ```bash
-python test_flask_api.py
+python test_unittest.py
 ```
 
 This will test:
@@ -341,8 +341,7 @@ The API uses SQLite database for all operations:
 ├── flask_app.py          # Main Flask application (SQLite-only)
 ├── auth.py              # Authentication module
 ├── database.py          # SQLite database operations
-├── test_flask_api.py    # API test suite
-├── test_refactoring.py  # SQLite persistence tests
+├── test_unittest.py     # Comprehensive test suite (database, auth, API)
 ├── demo.py              # SQLite demo with persistence
 ├── demo_refactored.py   # Comprehensive SQLite demo
 ├── requirements.txt     # Python dependencies

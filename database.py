@@ -443,7 +443,7 @@ class DatabaseManager(StorageManager):
             update_values = []
             
             for field, value in user_data.items():
-                if field in ['email', 'is_active']:
+                if field in ['email', 'is_active', 'last_login', 'updated_at']:
                     update_fields.append(f"{field} = ?")
                     update_values.append(value)
                 elif field == 'password':
@@ -465,6 +465,7 @@ class DatabaseManager(StorageManager):
                 cursor.execute(query, update_values)
                 
                 if cursor.rowcount > 0:
+                    conn.commit()  # Explicitly commit the transaction
                     if self.enable_logging:
                         self.logger.info(f"User '{username}' updated successfully")
                     return True
@@ -499,6 +500,7 @@ class DatabaseManager(StorageManager):
                 cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
                 
                 if cursor.rowcount > 0:
+                    conn.commit()  # Explicitly commit the transaction
                     if self.enable_logging:
                         self.logger.info(f"User '{username}' deleted successfully")
                     return True
@@ -589,19 +591,73 @@ class DatabaseManager(StorageManager):
     
     def _validate_user_input(self, username: str, password: str, email: Optional[str] = None) -> DatabaseResult:
         """Validate user input data."""
+        import re
+        
         # Username validation
-        if not username or len(username) < 3 or len(username) > 50:
+        if not username or not isinstance(username, str):
+            return DatabaseResult(
+                success=False,
+                message="Username is required",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        if len(username) < 3 or len(username) > 50:
             return DatabaseResult(
                 success=False,
                 message="Username must be 3-50 characters long",
                 result_type=DatabaseResultType.VALIDATION_ERROR
             )
         
+        # Username should contain only letters, numbers, and underscores
+        pattern = r'^[a-zA-Z0-9_]+$'
+        if not re.match(pattern, username):
+            return DatabaseResult(
+                success=False,
+                message="Username must contain only letters, numbers, and underscores",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
         # Password validation
-        if not password or len(password) < 8:
+        if not password or not isinstance(password, str):
+            return DatabaseResult(
+                success=False,
+                message="Password is required",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        if len(password) < 8:
             return DatabaseResult(
                 success=False,
                 message="Password must be at least 8 characters long",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        if len(password) > 128:
+            return DatabaseResult(
+                success=False,
+                message="Password must be no more than 128 characters long",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        # Check for at least one uppercase letter, one lowercase letter, and one number
+        if not re.search(r'[A-Z]', password):
+            return DatabaseResult(
+                success=False,
+                message="Password must contain at least one uppercase letter",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        if not re.search(r'[a-z]', password):
+            return DatabaseResult(
+                success=False,
+                message="Password must contain at least one lowercase letter",
+                result_type=DatabaseResultType.VALIDATION_ERROR
+            )
+        
+        if not re.search(r'\d', password):
+            return DatabaseResult(
+                success=False,
+                message="Password must contain at least one number",
                 result_type=DatabaseResultType.VALIDATION_ERROR
             )
         

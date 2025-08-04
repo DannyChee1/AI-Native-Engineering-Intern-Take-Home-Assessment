@@ -35,7 +35,7 @@ from database import DatabaseManager
 # Use DatabaseManager for all operations (SQLite-only approach)
 ```
 
-### 3. Test Suite (`test_refactoring.py`)
+### 3. Test Suite (`test_unittest.py`)
 
 **Completely Rewritten:**
 - Removed all in-memory storage tests
@@ -161,10 +161,9 @@ auth2 = AuthManager(storage2)
 ├── database.py              # SQLite-only database operations
 ├── auth.py                  # Authentication module (unchanged)
 ├── flask_app.py            # Flask API (SQLite-only)
-├── test_refactoring.py     # Comprehensive SQLite tests
+├── test_unittest.py        # Comprehensive test suite (database, auth, API)
 ├── demo.py                 # SQLite demo with persistence
 ├── demo_refactored.py      # Comprehensive SQLite demo
-├── test_flask_api.py       # Flask API tests (unchanged)
 ├── requirements.txt         # Dependencies (unchanged)
 ├── README.md               # Updated documentation
 ├── API_DOCUMENTATION.md    # Updated API docs
@@ -210,11 +209,8 @@ auth2 = AuthManager(storage2)
 
 ### Running Tests
 ```bash
-# Run comprehensive SQLite tests
-python test_refactoring.py
-
-# Run Flask API tests
-python test_flask_api.py
+# Run comprehensive test suite
+python test_unittest.py
 
 # Run demos
 python demo.py
