@@ -322,10 +322,11 @@ export JWT_SECRET_KEY="your-jwt-secret-key-change-in-production"
 
 ### Database Configuration
 
-The API supports both SQLite (production) and in-memory storage (development):
+The API uses SQLite database for all operations:
 
-- **Production**: Uses SQLite database (`users.db`)
-- **Development**: Can use in-memory storage for testing
+- **Database**: SQLite database (`users.db`)
+- **Persistence**: All data is persisted to disk
+- **Testing**: Uses temporary database files for testing
 
 ## Dependencies
 
@@ -337,10 +338,13 @@ The API supports both SQLite (production) and in-memory storage (development):
 ## File Structure
 
 ```
-├── flask_app.py          # Main Flask application
+├── flask_app.py          # Main Flask application (SQLite-only)
 ├── auth.py              # Authentication module
-├── database.py          # Database operations
+├── database.py          # SQLite database operations
 ├── test_flask_api.py    # API test suite
+├── test_refactoring.py  # SQLite persistence tests
+├── demo.py              # SQLite demo with persistence
+├── demo_refactored.py   # Comprehensive SQLite demo
 ├── requirements.txt     # Python dependencies
 └── API_DOCUMENTATION.md # This documentation
 ```

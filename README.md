@@ -105,21 +105,14 @@ def delete_user(self, username: str) -> bool
 def get_all_users(self) -> List[Dict[str, Any]]
 ```
 
-#### `InMemoryStorageManager`
+#### `DatabaseManager`
 
-Development/testing storage implementation:
-- **Fast**: No database overhead
-- **Simple**: No setup required
-- **Temporary**: Data lost on restart
-- **Perfect for**: Unit tests, development, demos
-
-#### `SQLiteStorageManager`
-
-Production-ready storage implementation:
+SQLite-based storage implementation:
 - **Persistent**: Data survives application restarts
-- **Reliable**: ACID compliance
+- **Reliable**: ACID compliance with SQLite
 - **Scalable**: Handles multiple concurrent users
-- **Perfect for**: Production applications, data persistence
+- **Testable**: Uses temporary databases for testing
+- **Perfect for**: Production applications, development, and testing
 
 ## 🚀 Quick Start
 
@@ -137,10 +130,10 @@ python demo.py
 
 ```python
 from auth import AuthManager
-from storage import InMemoryStorageManager
+from database import DatabaseManager
 
 # Initialize the system
-storage = InMemoryStorageManager()
+storage = DatabaseManager("users.db")
 auth_manager = AuthManager(storage)
 
 # Register a user
@@ -158,16 +151,25 @@ else:
     print(f"Login failed: {result.message}")
 ```
 
-### Production Setup
+### Testing Setup
 
-For production use, switch to SQLite storage:
+For testing, use temporary databases:
 
 ```python
-from storage import SQLiteStorageManager
+import tempfile
+from database import DatabaseManager
 
-# Use SQLite for persistent storage
-storage = SQLiteStorageManager("users.db")
+# Use temporary database for testing
+with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as tmp_file:
+    test_db = tmp_file.name
+
+storage = DatabaseManager(test_db, enable_logging=False)
 auth_manager = AuthManager(storage)
+
+# Clean up after testing
+import os
+if os.path.exists(test_db):
+    os.remove(test_db)
 ```
 
 ## 🧪 Testing

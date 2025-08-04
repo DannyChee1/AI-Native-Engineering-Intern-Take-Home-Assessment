@@ -75,63 +75,7 @@ class StorageManager(ABC):
         pass
 
 
-class InMemoryStorageManager(StorageManager):
-    """
-    In-memory storage implementation for development and testing.
-    Data is lost when the application restarts.
-    """
-    
-    def __init__(self):
-        """Initialize in-memory storage."""
-        self._users = {}
-    
-    def create_user(self, user_data: Dict[str, Any]) -> bool:
-        """Create a new user in memory storage."""
-        try:
-            username = user_data['username']
-            if username in self._users:
-                return False
-            self._users[username] = user_data.copy()
-            return True
-        except KeyError:
-            return False
-    
-    def get_user(self, username: str) -> Optional[Dict[str, Any]]:
-        """Retrieve user data by username."""
-        return self._users.get(username)
-    
-    def user_exists(self, username: str) -> bool:
-        """Check if a user exists."""
-        return username in self._users
-    
-    def update_user(self, username: str, user_data: Dict[str, Any]) -> bool:
-        """Update user data."""
-        if username not in self._users:
-            return False
-        self._users[username] = user_data.copy()
-        return True
-    
-    def delete_user(self, username: str) -> bool:
-        """Delete a user."""
-        if username not in self._users:
-            return False
-        del self._users[username]
-        return True
-    
-    def get_all_users(self) -> List[Dict[str, Any]]:
-        """Get all users (excluding sensitive data)."""
-        users = []
-        for username, user_data in self._users.items():
-            safe_user_data = {
-                'username': user_data['username'],
-                'created_at': user_data.get('created_at', 'Unknown')
-            }
-            users.append(safe_user_data)
-        return users
-    
-    def get_user_count(self) -> int:
-        """Get total number of users."""
-        return len(self._users)
+
 
 
 class DatabaseManager(StorageManager):

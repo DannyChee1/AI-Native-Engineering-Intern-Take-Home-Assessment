@@ -27,7 +27,7 @@ class AuthResult:
     """Result object for authentication operations."""
     success: bool
     message: str
-    result_type: AuthResultType
+    result_type: Type
     user_data: Optional[Dict[str, Any]] = None
 
 

@@ -14,7 +14,7 @@ import logging
 
 # Import existing modules
 from auth import AuthManager, AuthResultType
-from database import DatabaseManager, InMemoryStorageManager
+from database import DatabaseManager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +30,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=1)
 CORS(app)
 
 # Initialize storage and auth managers
-# Use DatabaseManager for production, InMemoryStorageManager for development
+# Use DatabaseManager for all operations (SQLite-only approach)
 storage_manager = DatabaseManager(db_path="users.db")
 auth_manager = AuthManager(storage_manager)
 
