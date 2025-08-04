@@ -1,41 +1,39 @@
-# 🔐 User Authentication System
+# User Authentication System
 
-A comprehensive, production-ready user authentication system built with Python, Flask, and SQLite. This system demonstrates modern software engineering practices including clean architecture, comprehensive testing, and secure authentication.
+A production-ready user authentication system built with Python, Flask, and SQLite. This system demonstrates modern software engineering practices including clean architecture, comprehensive testing, and secure authentication.
 
-## 📹 Loom video
+## Loom Video
 
 🎥 **[Watch the Loom Video](https://www.loom.com/share/476a801d9fe94139b24e643545925975)**
 
-*Note: Replace the placeholder URL with your actual Loom video link once uploaded.*
+## Features
 
-## 🎯 Features
+### Core Authentication
+- User registration with password validation
+- Secure login with JWT token authentication
+- Password hashing using SHA-256 with salt
+- Input validation with comprehensive error handling
 
-### ✅ Core Authentication
-- **User Registration** with password validation
-- **Secure Login** with JWT token authentication
-- **Password Hashing** using SHA-256 with salt
-- **Input Validation** with comprehensive error handling
+### Database Management
+- SQLite storage for persistent data (no external dependencies)
+- CRUD operations (Create, Read, Update, Delete)
+- Data persistence across application restarts
+- Connection management with proper error handling
 
-### ✅ Database Management
-- **SQLite Storage** for persistent data (no external dependencies)
-- **CRUD Operations** (Create, Read, Update, Delete)
-- **Data Persistence** across application restarts
-- **Connection Management** with proper error handling
+### RESTful API
+- Flask-based API with proper HTTP status codes
+- JWT authentication for secure endpoints
+- CORS support for cross-origin requests
+- Comprehensive error handling
 
-### ✅ RESTful API
-- **Flask-based API** with proper HTTP status codes
-- **JWT Authentication** for secure endpoints
-- **CORS Support** for cross-origin requests
-- **Comprehensive Error Handling**
+### Testing & Quality
+- 37 comprehensive unit tests (100% success rate)
+- Database testing with temporary files
+- Authentication flow testing
+- API endpoint testing
+- Data persistence verification
 
-### ✅ Testing & Quality
-- **37 Comprehensive Unit Tests** (100% success rate)
-- **Database Testing** with temporary files
-- **Authentication Flow Testing**
-- **API Endpoint Testing**
-- **Data Persistence Verification**
-
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -51,7 +49,7 @@ A comprehensive, production-ready user authentication system built with Python, 
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Assessment/
@@ -67,12 +65,12 @@ Assessment/
 └── API_DOCUMENTATION.md    # API documentation
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- **Python 3.8+** installed on your system
-- **Git** for version control (optional)
-- **Cursor IDE** for AI-powered development (recommended)
+- Python 3.8+ installed on your system
+- Git for version control (optional)
+- Cursor IDE for AI-powered development (recommended)
 
 ### 1. Clone or Download the Project
 ```bash
@@ -98,10 +96,10 @@ pip install Flask Flask-CORS PyJWT
 python test_unittest.py
 
 # Expected output:
-# ✅ Tests run: 37
-# ❌ Failures: 0
-# ⚠️  Errors: 0
-# 📈 Success rate: 100.0%
+# Tests run: 37
+# Failures: 0
+# Errors: 0
+# Success rate: 100.0%
 ```
 
 ### 4. Start the API Server
@@ -142,18 +140,18 @@ python demo.py
 python demo_refactored.py
 ```
 
-## 🧪 Testing Results
+## Testing Results
 
-### Current Status: ✅ **EXCELLENT**
-- **37 Total Tests** (23 passing, 14 skipped due to environment)
-- **100% Success Rate** for all non-skipped tests
-- **0 Failures, 0 Errors**
+### Current Status: EXCELLENT
+- 37 total tests (23 passing, 14 skipped due to environment)
+- 100% success rate for all non-skipped tests
+- 0 failures, 0 errors
 
 ### Test Breakdown:
-- 🗄️ **Database Operations**: 11 tests ✅
-- 🔐 **Authentication**: 8 tests ✅
-- 💾 **Data Persistence**: 3 tests ✅
-- 🌐 **Flask API**: 14 tests (skipped - environment issue)
+- Database Operations: 11 tests
+- Authentication: 8 tests
+- Data Persistence: 3 tests
+- Flask API: 14 tests (skipped - environment issue)
 
 ### Running Specific Tests
 ```bash
@@ -170,7 +168,7 @@ python -m unittest TestDataPersistence
 python -m unittest TestAPIEndpoints
 ```
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### POST /register
 Register a new user with validation.
@@ -250,24 +248,24 @@ Health check endpoint.
 }
 ```
 
-## 🔒 Security Features
+## Security Features
 
 ### Password Security
-- **SHA-256 Hashing** with unique salt per user
-- **Password Validation** (8+ chars, uppercase, lowercase, numbers)
-- **Username Validation** (3-50 chars, alphanumeric + underscore)
+- SHA-256 hashing with unique salt per user
+- Password validation (8+ chars, uppercase, lowercase, numbers)
+- Username validation (3-50 chars, alphanumeric + underscore)
 
 ### JWT Authentication
-- **Token-based Authentication** for API endpoints
-- **Automatic Token Expiration** (1 hour default)
-- **Secure Token Verification**
+- Token-based authentication for API endpoints
+- Automatic token expiration (1 hour default)
+- Secure token verification
 
 ### Input Validation
-- **JSON Schema Validation** for all API requests
-- **SQL Injection Prevention** using parameterized queries
-- **XSS Protection** through proper input sanitization
+- JSON schema validation for all API requests
+- SQL injection prevention using parameterized queries
+- XSS protection through proper input sanitization
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Users Table
 ```sql
@@ -299,7 +297,7 @@ CREATE TABLE user_sessions (
 );
 ```
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 ### Test Categories
 1. **Database Operations** (11 tests)
@@ -325,12 +323,12 @@ CREATE TABLE user_sessions (
    - Request/response validation
 
 ### Test Isolation
-- **Temporary Database Files** for each test
-- **Proper Setup/Teardown** methods
-- **No Cross-Test Dependencies**
-- **Clean Environment** per test
+- Temporary database files for each test
+- Proper setup/teardown methods
+- No cross-test dependencies
+- Clean environment per test
 
-## 🔧 Development Workflow
+## Development Workflow
 
 ### 1. Code Analysis with Cursor
 ```bash
@@ -365,19 +363,19 @@ flake8 .
 mypy .
 ```
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 ### Database Performance
-- **Connection Pooling** for efficient database access
-- **Indexed Queries** for fast user lookups
-- **Transaction Management** for data integrity
+- Connection pooling for efficient database access
+- Indexed queries for fast user lookups
+- Transaction management for data integrity
 
 ### API Performance
-- **JWT Token Caching** for reduced authentication overhead
-- **Efficient JSON Serialization** for fast responses
-- **Proper HTTP Status Codes** for client optimization
+- JWT token caching for reduced authentication overhead
+- Efficient JSON serialization for fast responses
+- Proper HTTP status codes for client optimization
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Setup
 1. **Environment Variables**
@@ -398,22 +396,18 @@ mypy .
    - Add request logging
    - Set up monitoring
 
-
-
 ---
 
-## 🎉 Success Metrics
+## Success Metrics
 
-✅ **Clean, Modular Code** - Separated concerns with clear interfaces  
-✅ **SQLite Storage** - Persistent data with no external dependencies  
-✅ **Flask API** - RESTful endpoints with proper HTTP status codes  
-✅ **Password Hashing** - Secure SHA-256 with salt  
-✅ **Comprehensive Testing** - 37 unit tests with 100% success rate  
-✅ **Error Handling** - Proper validation and error responses  
-✅ **Documentation** - Complete README and API documentation  
-✅ **AI-Enhanced Development** - Leveraged Cursor AI for optimization  
-
-**Status: 🚀 PRODUCTION READY**
+- Clean, modular code with separated concerns and clear interfaces
+- SQLite storage with persistent data and no external dependencies
+- Flask API with RESTful endpoints and proper HTTP status codes
+- Password hashing with secure SHA-256 and salt
+- Comprehensive testing with 37 unit tests and 100% success rate
+- Error handling with proper validation and error responses
+- Documentation with complete README and API documentation
+- AI-enhanced development leveraging Cursor AI for optimization
 
 ---
 
